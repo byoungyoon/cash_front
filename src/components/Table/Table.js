@@ -39,11 +39,19 @@ export default function CustomTable(props) {
             return (
               <TableRow key={key} className={classes.tableBodyRow}>
                 {prop.map((prop, key) => {
-                  return (
-                    <TableCell className={classes.tableCell} key={key}>
-                      {prop}
-                    </TableCell>
-                  );
+                  if(key === 0){
+                    return(
+                      <TableCell className={classes.tableCell} key={key}>
+                        <a href="">{prop}</a>
+                      </TableCell>
+                    );
+                  } else{
+                    return (
+                      <TableCell className={classes.tableCell} key={key}>
+                        {prop}
+                      </TableCell>
+                    );
+                  }
                 })}
               </TableRow>
             );
