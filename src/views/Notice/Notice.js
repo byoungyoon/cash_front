@@ -44,7 +44,6 @@ const useStyles = makeStyles(styles);
 
 export default function Notice() {
     const [noticeList, setNoticeList] = useState([]);
-    const [tableData, setTableData] = useState([]);
     const classes = useStyles();
 
     useEffect(()=>{
@@ -55,6 +54,15 @@ export default function Notice() {
         });
     },[]);
 
+    const result = Object.keys(noticeList).reduce((array, key)=>{
+      return [...array, [noticeList[key].noticeNo, 
+                        noticeList[key].noticeTitle,
+                        noticeList[key].createDate,
+                        noticeList[key].lastUpdate,
+                        noticeList[key].noticeCount
+                        ]
+              ]
+    }, []);
 
     return (
       <div>
@@ -70,10 +78,8 @@ export default function Notice() {
                       <CardBody>
                         <Table
                             tableHeaderColor="primary"
-                            tableHead={["Name", "Country", "City", "Salary"]}
-                            tableData={[
-                                
-                            ]}
+                            tableHead={["No", "Title", "CreateDate", "LastUpdate", "Count"]}
+                            tableData={result}
                             />
                         </CardBody>
                   </Card>
