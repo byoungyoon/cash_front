@@ -9,6 +9,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Table from "components/Table/Table.js";
 import axios from "axios";
+import Button from '@material-ui/core/Button';
+import PlusIcon from '@material-ui/icons/PlaylistAdd';
 
 const styles = {
     cardCategoryWhite: {
@@ -37,6 +39,10 @@ const styles = {
         fontWeight: "400",
         lineHeight: "1"
       }
+    },
+    buttonStyle: {
+      textAlign: "center",
+      marginTop: "1em"
     }
   };
 
@@ -45,16 +51,17 @@ const useStyles = makeStyles(styles);
 export default function Notice() {
     const [noticeList, setNoticeList] = useState([]);
     const classes = useStyles();
+    const [noticeNo, setNoticeNo] = useState(0);
 
     useEffect(()=>{
-        axios.get('http://localhost:8080/getNotice').then((data)=>{
-            if(data.status == 200){
-                setNoticeList(data.data);
-            }
-        });
-    },[]);
-
+      axios.get(`http://localhost:8080/getNotice?noticeNo=${noticeNo}`).then((data)=>{
+          if(data.status == 200){
+              setNoticeList(noticeList.concat(data.data));
+          }
+      });
+    },[noticeNo]);
     const result = Object.keys(noticeList).reduce((array, key)=>{
+      console.log(noticeList);
       return [...array, [noticeList[key].noticeNo, 
                         noticeList[key].noticeTitle,
                         noticeList[key].createDate,
@@ -63,6 +70,10 @@ export default function Notice() {
                         ]
               ]
     }, []);
+      
+    const handleClick = () => {
+      setNoticeNo(noticeList[noticeList.length-1].noticeNo);
+    }
 
     return (
       <div>
@@ -81,6 +92,17 @@ export default function Notice() {
                             tableHead={["No", "Title", "CreateDate", "LastUpdate", "Count"]}
                             tableData={result}
                             />
+                        <div className={classes.buttonStyle}>
+                          <Button
+                            variant="contained"
+                            color="inherit"
+                            className={classes.button}
+                            endIcon={<PlusIcon />}
+                            onClick={handleClick}
+                          >
+                            More
+                          </Button>
+                        </div>
                         </CardBody>
                   </Card>
               </GridItem>

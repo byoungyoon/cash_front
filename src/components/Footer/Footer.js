@@ -46,7 +46,7 @@ export default function Footer(props) {
           <span>
             &copy; {1900 + new Date().getYear()}{" "}
             <a
-              href="javascript:void(0)"
+              href="#"
               className={classes.a}
             >
               Byoungyoon
