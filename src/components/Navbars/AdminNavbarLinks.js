@@ -23,7 +23,7 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks({auth}) {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
@@ -65,6 +65,7 @@ export default function AdminNavbarLinks() {
           <Search />
         </Button>
       </div>
+      {auth &&(
       <Button
         color={window.innerWidth > 959 ? "transparent" : "white"}
         justIcon={window.innerWidth > 959}
@@ -77,7 +78,9 @@ export default function AdminNavbarLinks() {
           <p className={classes.linkText}>Dashboard</p>
         </Hidden>
       </Button>
+      )}
       <div className={classes.manager}>
+        {auth &&(
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -95,6 +98,7 @@ export default function AdminNavbarLinks() {
             </p>
           </Hidden>
         </Button>
+        )}
         <Poppers
           open={Boolean(openNotification)}
           anchorEl={openNotification}
@@ -156,6 +160,7 @@ export default function AdminNavbarLinks() {
         </Poppers>
       </div>
       <div className={classes.manager}>
+        {auth && (
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -170,6 +175,7 @@ export default function AdminNavbarLinks() {
             <p className={classes.linkText}>Profile</p>
           </Hidden>
         </Button>
+        )}
         <Poppers
           open={Boolean(openProfile)}
           anchorEl={openProfile}

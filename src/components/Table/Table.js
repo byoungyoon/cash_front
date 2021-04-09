@@ -42,7 +42,7 @@ export default function CustomTable(props) {
                   if(key === 0){
                     return(
                       <TableCell className={classes.tableCell} key={key}>
-                        <a href="">{prop}</a>
+                        {prop}
                       </TableCell>
                     );
                   } else{

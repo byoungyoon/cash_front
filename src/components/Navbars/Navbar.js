@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -13,6 +13,8 @@ import Menu from "@material-ui/icons/Menu";
 import AdminNavbarLinks from "./AdminNavbarLinks.js";
 import RTLNavbarLinks from "./RTLNavbarLinks.js";
 import Button from "components/CustomButtons/Button.js";
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
 
@@ -34,6 +36,13 @@ export default function Header(props) {
   const appBarClasses = classNames({
     [" " + classes[color]]: color
   });
+
+  const [auth, setAuth] = useState(true);
+
+  const handleChange = (e) => {
+    setAuth(e.target.checked);
+  };
+
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
@@ -42,9 +51,13 @@ export default function Header(props) {
           <Button color="transparent" href="#" className={classes.title}>
             {makeBrand()}
           </Button>
+          <FormControlLabel
+            control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
+            label={auth ? 'Logout' : 'Login'}
+          />
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks auth={auth} />}
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
