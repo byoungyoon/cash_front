@@ -18,6 +18,7 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Select from '@material-ui/core/Select';
+import axios from "axios";
 
 const styles={
     bodyStyle: {
@@ -55,9 +56,12 @@ export default function Login(){
     const classes = useStyles();
 
     const [values, setValues] = React.useState({
-        password: '',
+        userId: '',
+        userPw: '',
         showPassword: false,
-        gender: '',
+        name: '',
+        userGender: '',
+        userPhone: '', 
     });
 
     const [signup, setSingup] = useState(false);
@@ -65,14 +69,6 @@ export default function Login(){
     const handleChange = (prop) => (event) => {
       setValues({ ...values, [prop]: event.target.value });
     };
-
-    const handleChangeByGender = (e) => {
-        const name = e.target.name;
-        setValues({
-            ...values,
-            [name]: e.target.value
-        });
-    }
     
     const handleClickShowPassword = () => {
       setValues({ ...values, showPassword: !values.showPassword });
@@ -86,6 +82,22 @@ export default function Login(){
         setSingup(signup => !signup);
     };
 
+    const handleSignup = () => {
+        var user = new FormData();
+        user.append('userId', values.userId);
+        user.append('userPw', values.userPw);
+        user.append('name', values.name);
+        user.append('userGender', values.userGender);
+        user.append('userPhone', values.userPhone);
+
+        axios.post('http://localhost:8080/signup', user)
+            .then(response => {
+                console.log('signup success');
+            }).catch(error => {
+                console.log('failed', error);
+            })
+    }
+
     return(
         <div>
           <GridContainer>
@@ -96,7 +108,14 @@ export default function Login(){
                       <CardBody className={classes.bodyStyle}>
                       <h3 className={classes.titleStyle}>Log in</h3>
                         <div className={classes.formGroup}>
-                            <TextField className={classes.inputStyle} id="standard-basic" label="UserId" variant="outlined" />
+                            <TextField 
+                                className={classes.inputStyle} 
+                                value={values.userId}
+                                onChange={handleChange('userId')} 
+                                id="standard-basic" 
+                                label="UserId" 
+                                variant="outlined" 
+                            />
                         </div>
 
                         <div className={classes.formGroup}>
@@ -105,8 +124,8 @@ export default function Login(){
                             <OutlinedInput
                                 id="outlined-adornment-password"
                                 type={values.showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                onChange={handleChange('password')}
+                                value={values.userPw}
+                                onChange={handleChange('userPw')}
                                 endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -149,13 +168,32 @@ export default function Login(){
                               <div>
                                 <h3 className={classes.titleStyle}>Sign up</h3>
                                 <div className={classes.formGroup}>
-                                    <TextField className={classes.inputStyle} label="UserId" variant="outlined" />
+                                    <TextField 
+                                        className={classes.inputStyle} 
+                                        label="UserId" 
+                                        variant="outlined" 
+                                        value={values.userId}
+                                        onChange={handleChange('userId')}
+                                    />
                                 </div>
                                 <div className={classes.formGroup}>
-                                    <TextField className={classes.inputStyle} label="Password" variant="outlined" />
+                                    <TextField 
+                                        className={classes.inputStyle} 
+                                        type="password"
+                                        label="Password" 
+                                        variant="outlined" 
+                                        value={values.userPw}
+                                        onChange={handleChange('userPw')}
+                                    />
                                 </div>
                                 <div className={classes.formGroup}>
-                                    <TextField className={classes.inputStyle} label="Name" variant="outlined" />
+                                    <TextField 
+                                        className={classes.inputStyle} 
+                                        label="Name" 
+                                        variant="outlined" 
+                                        value={values.name}
+                                        onChange={handleChange('name')}
+                                    />
                                 </div>
                                 <div className={classes.formGroup}>
                                     <FormControl variant="outlined" className={classes.formControl ,classes.inputStyle}>
@@ -163,11 +201,7 @@ export default function Login(){
                                         <Select
                                         native
                                         value={values.gender}
-                                        onChange={handleChangeByGender}
-                                        inputProps={{
-                                            name: 'gender',
-                                            id: 'age-native-simple',
-                                        }}
+                                        onChange={handleChange('userGender')}
                                         >
                                         <option aria-label="None" value="" />
                                         <option value={"Man"}>Man</option>
@@ -176,7 +210,13 @@ export default function Login(){
                                     </FormControl>
                                 </div>
                                 <div className={classes.formGroup}>
-                                    <TextField className={classes.inputStyle} label="Phone" variant="outlined" />
+                                    <TextField 
+                                        className={classes.inputStyle} 
+                                        label="Phone" 
+                                        variant="outlined"
+                                        value={values.userPhone}
+                                        onChange={handleChange('userPhone')} 
+                                    />
                                 </div>
                                 <div className={classes.formGroup}>
                                     <Button 
@@ -184,6 +224,7 @@ export default function Login(){
                                         endIcon={<Icon>send</Icon>}
                                         className={classes.inputStyle}
                                         size="large"
+                                        onClick={handleSignup}
                                     >
                                         Sign in
                                     </Button>
