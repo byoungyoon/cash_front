@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {useCookies} from 'react-cookie';
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -37,10 +38,23 @@ export default function Header(props) {
     [" " + classes[color]]: color
   });
 
-  const [auth, setAuth] = useState(true);
+  const [auth, setAuth] = useState(false);
+
+  const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+
+  useEffect(() =>{
+    if(cookie.rememberJwt !== undefined) {
+      setAuth(true);
+    }
+  },[auth]);
 
   const handleChange = (e) => {
-    setAuth(e.target.checked);
+    if(auth == false){
+      console.log('로그인 창으로');
+    } else{
+      setAuth(false);
+      removeCookie('rememberJwt');
+    }
   };
 
   return (

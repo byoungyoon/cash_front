@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useCookies} from 'react-cookie';
 import clsx from 'clsx';
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,11 +9,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import IconButton from '@material-ui/core/IconButton';
 import { InputLabel} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
@@ -58,10 +55,14 @@ export default function Login(){
     const [values, setValues] = React.useState({
         userId: '',
         userPw: '',
-        showPassword: false,
         name: '',
         userGender: '',
         userPhone: '', 
+    });
+
+    const [loginValues, setLoginValues] = useState({
+        userId: '',
+        userPw: '',
     });
 
     const [signup, setSingup] = useState(false);
@@ -69,13 +70,9 @@ export default function Login(){
     const handleChange = (prop) => (event) => {
       setValues({ ...values, [prop]: event.target.value });
     };
-    
-    const handleClickShowPassword = () => {
-      setValues({ ...values, showPassword: !values.showPassword });
-    };
-    
-    const handleMouseDownPassword = (event) => {
-      event.preventDefault();
+
+    const handleLoginChange = (prop) => (event) => {
+        setLoginValues({...loginValues, [prop]: event.target.value});
     };
 
     const handleClickToSignup = () => {
@@ -98,6 +95,23 @@ export default function Login(){
             })
     }
 
+    const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+        
+    const handleSignin = () => {
+        var user = new FormData();
+        user.append('userId', loginValues.userId);
+        user.append('userPw', loginValues.userPw);
+
+        axios.post('http://localhost:8080/login', user)
+            .then(response => {
+                setCookie('rememberJwt', response.data.token);
+                console.log(response.data.token);
+            }).catch(error => {
+                console.log('login failed', error);
+            })
+    }
+
+
     return(
         <div>
           <GridContainer>
@@ -110,8 +124,8 @@ export default function Login(){
                         <div className={classes.formGroup}>
                             <TextField 
                                 className={classes.inputStyle} 
-                                value={values.userId}
-                                onChange={handleChange('userId')} 
+                                value={loginValues.userId}
+                                onChange={handleLoginChange('userId')} 
                                 id="standard-basic" 
                                 label="UserId" 
                                 variant="outlined" 
@@ -123,22 +137,10 @@ export default function Login(){
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
-                                type={values.showPassword ? 'text' : 'password'}
-                                value={values.userPw}
-                                onChange={handleChange('userPw')}
-                                endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                    >
-                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                                }
-                            />
+                                type="password"
+                                value={loginValues.userPw}
+                                onChange={handleLoginChange('userPw')}
+                            /> 
                             </FormControl>
                         </div>
                         <div className={classes.formGroup, classes.rememberStyle}>
@@ -154,6 +156,7 @@ export default function Login(){
                                 endIcon={<Icon>send</Icon>}
                                 className={classes.inputStyle}
                                 size="large"
+                                onClick={handleSignin}
                             >
                                 Sign in
                             </Button>
