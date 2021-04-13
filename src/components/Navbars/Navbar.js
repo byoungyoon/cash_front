@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {useCookies} from 'react-cookie';
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -38,22 +38,13 @@ export default function Header(props) {
     [" " + classes[color]]: color
   });
 
-  const [auth, setAuth] = useState(false);
-
   const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
 
-  useEffect(() =>{
-    if(cookie.rememberJwt !== undefined) {
-      setAuth(true);
-    }
-  },[auth]);
-
   const handleChange = (e) => {
-    if(auth == false){
-      console.log('로그인 창으로');
-    } else{
-      setAuth(false);
+    if(e.target.checked == false){
       removeCookie('rememberJwt');
+    } else{
+      console.log('로그인 창으로');
     }
   };
 
@@ -66,12 +57,12 @@ export default function Header(props) {
             {makeBrand()}
           </Button>
           <FormControlLabel
-            control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-            label={auth ? 'Logout' : 'Login'}
+            control={<Switch checked={props.auth} onChange={handleChange} aria-label="login switch" />}
+            label={props.auth ? 'Logout' : 'Login'}
           />
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks auth={auth} />}
+          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks auth={props.auth} />}
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton

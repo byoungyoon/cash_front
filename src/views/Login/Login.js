@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {useCookies} from 'react-cookie';
+import { useHistory } from "react-router-dom";
 import clsx from 'clsx';
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -79,6 +80,8 @@ export default function Login(){
         setSingup(signup => !signup);
     };
 
+    let history = useHistory();
+
     const handleSignup = () => {
         var user = new FormData();
         user.append('userId', values.userId);
@@ -89,7 +92,14 @@ export default function Login(){
 
         axios.post('http://localhost:8080/signup', user)
             .then(response => {
-                console.log('signup success');
+                setSingup(signup => !signup);
+                setValues({
+                    userId: '',
+                    userPw: '',
+                    name: '',
+                    userGender: '',
+                    userPhone: '', 
+                });
             }).catch(error => {
                 console.log('failed', error);
             })
@@ -105,7 +115,7 @@ export default function Login(){
         axios.post('http://localhost:8080/login', user)
             .then(response => {
                 setCookie('rememberJwt', response.data.token);
-                console.log(response.data.token);
+                history.push('/Dashboard');
             }).catch(error => {
                 console.log('login failed', error);
             })

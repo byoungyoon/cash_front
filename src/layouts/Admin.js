@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import {useCookies} from 'react-cookie';
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -75,6 +76,9 @@ export default function Admin({ ...rest }) {
     }
   };
 
+  const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+  const [auth, setAuth] = useState(false);
+
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -85,6 +89,13 @@ export default function Admin({ ...rest }) {
       document.body.style.overflow = "hidden";
     }
     window.addEventListener("resize", resizeFunction);
+    console.log(cookie.rememberJwt);
+    if(cookie.rememberJwt != undefined){
+      setAuth(true);
+    } else{
+      setAuth(false);
+    }
+
     // Specify how to clean up after this effect:
     return function cleanup() {
       if (navigator.platform.indexOf("Win") > -1) {
@@ -110,6 +121,7 @@ export default function Admin({ ...rest }) {
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
+          auth={auth}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />
