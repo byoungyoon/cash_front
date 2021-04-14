@@ -32,7 +32,7 @@ const switchRoutes = (
             key={key}
           />
         );
-      }
+      } 
       return null;
     })}
     <Redirect from="/admin" to="/admin/dashboard" />
@@ -76,35 +76,35 @@ export default function Admin({ ...rest }) {
     }
   };
 
-  const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
-  const [auth, setAuth] = useState(false);
+    const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+    const [auth, setAuth] = useState(false);
 
-  // initialize and destroy the PerfectScrollbar plugin
-  React.useEffect(() => {
-    if (navigator.platform.indexOf("Win") > -1) {
-      ps = new PerfectScrollbar(mainPanel.current, {
-        suppressScrollX: true,
-        suppressScrollY: false
-      });
-      document.body.style.overflow = "hidden";
-    }
-    window.addEventListener("resize", resizeFunction);
-    console.log(cookie.rememberJwt);
-    if(cookie.rememberJwt != undefined){
-      setAuth(true);
-    } else{
-      setAuth(false);
-    }
-
-    // Specify how to clean up after this effect:
-    return function cleanup() {
+    // initialize and destroy the PerfectScrollbar plugin
+    React.useEffect(() => {
       if (navigator.platform.indexOf("Win") > -1) {
-        ps.destroy();
+        ps = new PerfectScrollbar(mainPanel.current, {
+          suppressScrollX: true,
+          suppressScrollY: false
+        });
+        document.body.style.overflow = "hidden";
       }
-      window.removeEventListener("resize", resizeFunction);
-    };
+      window.addEventListener("resize", resizeFunction);
+      console.log(cookie.rememberJwt);
+      if(cookie.rememberJwt != undefined){
+        setAuth(true);
+      } else{
+        setAuth(false);
+      }
 
-  }, [mainPanel]);
+      // Specify how to clean up after this effect:
+      return function cleanup() {
+        if (navigator.platform.indexOf("Win") > -1) {
+          ps.destroy();
+        }
+        window.removeEventListener("resize", resizeFunction);
+      };
+
+    }, [mainPanel]);
 
   return (
     <div className={classes.wrapper}>

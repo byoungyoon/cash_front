@@ -44,7 +44,7 @@ export default function Header(props) {
     if(e.target.checked == false){
       removeCookie('rememberJwt');
     } else{
-      console.log('로그인 창으로');
+      alert('로그인을 해주세요.');
     }
   };
 

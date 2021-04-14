@@ -28,6 +28,8 @@ import Typography from "views/Typography/Typography.js";
 import NotificationsPage from "views/Notifications/Notifications.js";
 import NoticePage from "views/Notice/Notice.js";
 import LoginPage from "views/Login/Login.js";
+import InfoPage from "views/Info/Info.js";
+
 
 const dashboardRoutes = [
   {
@@ -86,6 +88,14 @@ const dashboardRoutes = [
     component: LoginPage,
     layout: "/admin"
   },
+  {
+    path: "/Info",
+    name: "Info",
+    rtlName: "إخطارات",
+    icon: Notifications,
+    component: InfoPage,
+    layout: "/admin"
+  },  
 ];
 
 export default dashboardRoutes;
