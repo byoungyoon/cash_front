@@ -6,7 +6,7 @@ import GridItem from 'components/Grid/GridItem';
 import Button from "components/CustomButtons/Button.js";
 import React, { lazy, useEffect, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";  
-import avatar from "assets/img/faces/marc.jpg";
+import avatar from "assets/img/faces/default.jpg";
 import {useCookies} from 'react-cookie';
 import axios from "axios";
 
@@ -44,26 +44,27 @@ export default function Info(){
     });
     
     useEffect(()=>{
-        console.log()
+        //console.log()
         axios({
             url: 'http://localhost:8080/user/getInfo',
             method: 'GET',
             headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
         }).then((response)=>{
-            console.log(response.data);
+            //console.log(response.data);
             setValues({
                 userName: response.data.name,
                 userGender: response.data.userGender,
                 userPhone: response.data.userPhone,
                 userInfo: response.data.userInfo,
-                userImg: 'assets/img/faces/' + response.data.userImg
+                userImg: response.data.userImg
             });
 
         });
     },[]);
-    //const userImg = require(values.userImg)
 
     console.log(values.userImg);
+    //const imagePath = require(`../..//../../${values.userImg}`);
+
     return(
         <div>
             <GridContainer>
@@ -78,7 +79,7 @@ export default function Info(){
                     <Card profile>
                         <CardAvatar profile>
                         <a href="#pablo" onClick={e => e.preventDefault()}>
-                            <img src={values.userImg} alt="..." />
+                            {/* <img src={imagePath} /> */}
                         </a>
                         </CardAvatar>
                         <CardBody profile>
@@ -87,6 +88,9 @@ export default function Info(){
                         <p className={classes.description}>
                             {values.userInfo!==null? values.userInfo:'내용 없음'}
                         </p>
+                        <Button color="primary" round>
+                            수정
+                        </Button>
                         </CardBody>
                     </Card>
                 </GridItem>

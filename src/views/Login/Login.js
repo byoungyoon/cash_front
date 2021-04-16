@@ -69,7 +69,7 @@ export default function Login(){
     const [signup, setSingup] = useState(false);
     
     const handleChange = (prop) => (event) => {
-      setValues({ ...values, [prop]: event.target.value });
+        setValues({ ...values, [prop]: event.target.value });
     };
 
     const handleLoginChange = (prop) => (event) => {

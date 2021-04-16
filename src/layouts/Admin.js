@@ -89,7 +89,7 @@ export default function Admin({ ...rest }) {
         document.body.style.overflow = "hidden";
       }
       window.addEventListener("resize", resizeFunction);
-      console.log(cookie.rememberJwt);
+      //console.log(cookie.rememberJwt);
       if(cookie.rememberJwt != undefined){
         setAuth(true);
       } else{

@@ -61,7 +61,7 @@ export default function Notice() {
       });
     },[noticeNo]);
     const result = Object.keys(noticeList).reduce((array, key)=>{
-      console.log(noticeList);
+      //console.log(noticeList);
       return [...array, [noticeList[key].noticeNo, 
                         noticeList[key].noticeTitle,
                         noticeList[key].createDate,
