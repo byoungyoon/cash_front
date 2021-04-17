@@ -25,6 +25,7 @@ export default function CardAvatar(props) {
     <div className={cardAvatarClasses} {...rest}>
       {children}
     </div>
+    
   );
 }
 
