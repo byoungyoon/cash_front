@@ -76,7 +76,7 @@ export default function Admin({ ...rest }) {
     }
   };
 
-    const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+    const [cookie] = useCookies(['rememberJwt']);
     const [auth, setAuth] = useState(false);
 
     // initialize and destroy the PerfectScrollbar plugin
@@ -90,7 +90,7 @@ export default function Admin({ ...rest }) {
       }
       window.addEventListener("resize", resizeFunction);
       //console.log(cookie.rememberJwt);
-      if(cookie.rememberJwt != undefined){
+      if(cookie.rememberJwt !== undefined){
         setAuth(true);
       } else{
         setAuth(false);

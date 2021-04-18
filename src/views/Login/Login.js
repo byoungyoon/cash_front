@@ -105,7 +105,7 @@ export default function Login(){
             })
     }
 
-    const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+    const [cookie, setCookie] = useCookies(['rememberJwt']);
         
     const handleSignin = () => {
         var user = new FormData();

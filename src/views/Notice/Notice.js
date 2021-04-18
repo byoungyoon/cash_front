@@ -56,7 +56,7 @@ export default function Notice() {
     useEffect(()=>{
       axios.get(`http://localhost:8080/getNotice?noticeNo=${noticeNo}`).then((data)=>{
           if(data.status === 200){
-              setNoticeList(noticeList.concat(data.data));
+              setNoticeList((noticeList)=>noticeList.concat(data.data));
           }
       });
     },[noticeNo]);

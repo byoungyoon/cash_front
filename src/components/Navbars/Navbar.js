@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {useCookies} from 'react-cookie';
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -38,10 +38,10 @@ export default function Header(props) {
     [" " + classes[color]]: color
   });
 
-  const [cookie, setCookie, removeCookie] = useCookies(['rememberJwt']);
+  const [removeCookie] = useCookies(['rememberJwt']);
 
   const handleChange = (e) => {
-    if(e.target.checked == false){
+    if(e.target.checked === false){
       removeCookie('rememberJwt');
     } else{
       alert('로그인을 해주세요.');
