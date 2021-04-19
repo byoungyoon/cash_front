@@ -1,7 +1,11 @@
 import Card from "components/Card/Card.js";
+import ChartistGraph from "react-chartist";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
+import CardFooter from "components/Card/CardFooter.js";
+import CardHeader from "components/Card/CardHeader.js";
 import GridContainer from 'components/Grid/GridContainer';
+import AccessTime from "@material-ui/icons/AccessTime";
 import GridItem from 'components/Grid/GridItem';
 import Button from '@material-ui/core/Button';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -11,6 +15,12 @@ import axios from "axios";
 import IconButton from '@material-ui/core/IconButton';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { FormControl, InputLabel, Select, TextField } from "@material-ui/core";
+
+import {
+    dailySalesChart,
+    emailsSubscriptionChart,
+    completedTasksChart
+  } from "variables/charts.js";
 
 const styles = (theme) =>({
     cardCategoryWhite: {
@@ -135,11 +145,29 @@ export default function Info(){
         <div>
             <GridContainer>
                 <GridItem xs={12} sm={12} md={8}>
-                    <Card>
-                        <CardBody>
-                            123
-                        </CardBody>
-                    </Card>
+                    <GridItem xs={12} sm={12} md={6}>
+                        <Card chart>
+                            <CardHeader color="warning">
+                            <ChartistGraph
+                                className="ct-chart"
+                                data={emailsSubscriptionChart.data}
+                                type="Bar"
+                                options={emailsSubscriptionChart.options}
+                                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
+                                listener={emailsSubscriptionChart.animation}
+                            />
+                            </CardHeader>
+                            <CardBody>
+                            <h4 className={classes.cardTitle}>Email Subscriptions</h4>
+                            <p className={classes.cardCategory}>Last Campaign Performance</p>
+                            </CardBody>
+                            <CardFooter chart>
+                            <div className={classes.stats}>
+                                <AccessTime /> campaign sent 2 days ago
+                            </div>
+                            </CardFooter>
+                        </Card>
+                    </GridItem>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                     <Card profile>
