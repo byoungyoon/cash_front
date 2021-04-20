@@ -21,6 +21,7 @@ import {
     emailsSubscriptionChart,
     completedTasksChart
   } from "variables/charts.js";
+import { SystemUpdate } from "@material-ui/icons";
 
 const styles = (theme) =>({
     cardCategoryWhite: {
@@ -73,7 +74,10 @@ export default function Info(){
         userPhone : '',
         userInfo : '',
         userImg: ''
-    })
+    });
+
+    const comeData = [0,0,0,0,0,0,0,0,0,0,0,0];
+    const [incomeData, setIncomeData] = useState([]);
     
     useEffect(()=>{
         //console.log()
@@ -84,15 +88,23 @@ export default function Info(){
         }).then((response)=>{
             //console.log(response.data);
             setValues({
-                userName: response.data.name,
-                userGender: response.data.userGender,
-                userPhone: response.data.userPhone,
-                userInfo: response.data.userInfo,
-                userImg: response.data.userImg
+                userName: response.data.user.name,
+                userGender: response.data.user.userGender,
+                userPhone: response.data.user.userPhone,
+                userInfo: response.data.user.userInfo,
+                userImg: response.data.user.userImg
+            });
+
+            response.data.incomeChart.map((data)=>{
+                for(let i=incomeData.length; i<data.cashbookDate*1-1; i++){
+                    setIncomeData(incomeData.concat(...incomeData,0));
+                }
+
             });
         });
     },[modifyForm]);
 
+    console.log(incomeData);
 
     const handleImageChange = (event) => {
         let reader = new FileReader();
