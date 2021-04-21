@@ -18,7 +18,7 @@ import { FormControl, InputLabel, Select, TextField } from "@material-ui/core";
 
 import {
     dailySalesChart,
-    emailsSubscriptionChart,
+    incomeChart,
     completedTasksChart
   } from "variables/charts.js";
 import { SystemUpdate } from "@material-ui/icons";
@@ -48,7 +48,7 @@ const styles = (theme) =>({
         '& > *':{
           margin: theme.spacing(1)
         }
-    }
+      }
 })
 
 const useStyles = makeStyles(styles);
@@ -76,8 +76,52 @@ export default function Info(){
         userImg: ''
     });
 
-    const comeData = [0,0,0,0,0,0,0,0,0,0,0,0];
     const [incomeData, setIncomeData] = useState([]);
+    const [outcomeData, setOutcomeData] = useState([]);
+
+    const [maxIncomeData, setMaxIncomeData] = useState(0);
+    const [maxOutcomeData, setMaxOutcomeData] = useState(0);
+
+    const [sumIncomeData, setSumIncomeData] = useState(0);
+    const [sumOutcomeData, setSumOutcomeData] = useState(0);
+
+    const income = {
+        labels:
+        [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec" 
+        ],
+        series:[incomeData]
+    };
+
+    const outcome = {
+        labels:
+        [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec" 
+        ],
+        series:[outcomeData]
+    };
     
     useEffect(()=>{
         //console.log()
@@ -95,16 +139,15 @@ export default function Info(){
                 userImg: response.data.user.userImg
             });
 
-            response.data.incomeChart.map((data)=>{
-                for(let i=incomeData.length; i<data.cashbookDate*1-1; i++){
-                    setIncomeData(incomeData.concat(...incomeData,0));
-                }
-
-            });
+            setIncomeData(response.data.incomeChart);
+            setMaxIncomeData(response.data.incomeChart.reduce((a,b)=>a>b?a:b));
+            setSumIncomeData(response.data.incomeChart.reduce((a,b)=>a+b));
+            setOutcomeData(response.data.outcomeChart);
+            setMaxOutcomeData(response.data.outcomeChart.reduce((a,b)=>a>b?a:b));
+            setSumOutcomeData(response.data.incomeChart.reduce((a,b)=>a+b));
         });
     },[modifyForm]);
 
-    console.log(incomeData);
 
     const handleImageChange = (event) => {
         let reader = new FileReader();
@@ -156,22 +199,26 @@ export default function Info(){
     return(
         <div>
             <GridContainer>
-                <GridItem xs={12} sm={12} md={8}>
-                    <GridItem xs={12} sm={12} md={6}>
+                <GridItem xs={12} sm={12} md={9}>
+                <GridContainer>
+                    <GridItem xs={6} sm={6} md={6}>
                         <Card chart>
-                            <CardHeader color="warning">
+                            <CardHeader color="success">
                             <ChartistGraph
                                 className="ct-chart"
-                                data={emailsSubscriptionChart.data}
+                                data={income}
                                 type="Bar"
-                                options={emailsSubscriptionChart.options}
-                                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                                listener={emailsSubscriptionChart.animation}
+                                options={incomeChart.options}
+                                responsiveOptions={incomeChart.responsiveOptions}
+                                listener={incomeChart.animation}
                             />
                             </CardHeader>
                             <CardBody>
-                            <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                            <p className={classes.cardCategory}>Last Campaign Performance</p>
+                            <h4 className={classes.cardTitle}>연간 수입 차트</h4>
+                            <div>
+                                <p className={classes.cardCategory}>최고 수입 : {maxIncomeData}원</p>
+                                <p className={classes.cardCategory}>총 수입 : {sumIncomeData}원</p>
+                            </div>
                             </CardBody>
                             <CardFooter chart>
                             <div className={classes.stats}>
@@ -180,8 +227,35 @@ export default function Info(){
                             </CardFooter>
                         </Card>
                     </GridItem>
+                    <GridItem xs={6} sm={6} md={6}>
+                        <Card chart>
+                            <CardHeader color="danger">
+                            <ChartistGraph
+                                className="ct-chart"
+                                data={outcome}
+                                type="Bar"
+                                options={incomeChart.options}
+                                responsiveOptions={incomeChart.responsiveOptions}
+                                listener={incomeChart.animation}
+                            />
+                            </CardHeader>
+                            <CardBody>
+                            <h4 className={classes.cardTitle}>연간 지출 차트</h4>
+                            <div>
+                                <p className={classes.cardCategory}>최고 지출 : {maxOutcomeData}원</p>
+                                <p className={classes.cardCategory}>총 지출 : {sumOutcomeData}원</p>
+                            </div>
+                            </CardBody>
+                            <CardFooter chart>
+                            <div className={classes.stats}>
+                                <AccessTime /> campaign sent 2 days ago
+                            </div>
+                            </CardFooter>
+                        </Card>
+                    </GridItem>
+                    </GridContainer>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={3}>
                     <Card profile>
                         {modifyForm &&(
                         <>
