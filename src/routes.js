@@ -25,10 +25,10 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
 import NoticePage from "views/Notice/Notice.js";
 import LoginPage from "views/Login/Login.js";
 import InfoPage from "views/Info/Info.js";
+import CashbookPage from "views/Cashbook/Cashbook.js";
 
 
 const dashboardRoutes = [
@@ -65,11 +65,11 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/notifications",
-    name: "Notifica",
+    path: "/cashbook",
+    name: "Cashbook",
     rtlName: "إخطارات",
     icon: Notifications,
-    component: NotificationsPage,
+    component: CashbookPage,
     layout: "/admin"
   },
   {
