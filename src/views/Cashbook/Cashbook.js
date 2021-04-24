@@ -11,7 +11,8 @@ import Moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'; 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { blackColor } from "assets/jss/material-dashboard-react";
+import {useCookies} from 'react-cookie';
+import axios from "axios";
 
 const styles = {
     cardCategoryWhite: {
@@ -78,6 +79,8 @@ const useStyles = makeStyles(styles);
 export default function Cashbook() {
     const classes = useStyles();
 
+    const [cookie] = useCookies(['rememberJwt']);
+
     const [getMoment, setMoment] = useState(Moment());
     const today = getMoment;
     
@@ -87,6 +90,19 @@ export default function Cashbook() {
     const calendarArr = () => {
       let result = [];
       let week = firstWeek;
+
+      let currentMonth = today.clone().startOf('year').week(week).startOf('week').add(7, 'day').format('YYYY-M');
+      
+      if(cookie.rememberJwt != undefined){
+        axios({
+          url: 'http://localhost:8080/user/getCashbook?currentMonth=' + currentMonth,
+          method: 'GET',
+          headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
+        }).then((response)=>{
+            console.log(response);
+        });
+      }
+
       for(week; week<=lastWeek; week++){
         result = result.concat(
           <tr key={week}>
@@ -96,7 +112,7 @@ export default function Cashbook() {
                 
                 if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
                   return(
-                    <td key={index} style={{backgroundColor: '#D1B2FF'}}>
+                    <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
                       <span>{days.format('D')}</span>
                     </td>
                   );
@@ -110,6 +126,12 @@ export default function Cashbook() {
                   return(
                     <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                       <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                      <div>
+                        123
+                      </div>
+                      <div>
+                        123
+                      </div>
                     </td>
                   );
                 }
