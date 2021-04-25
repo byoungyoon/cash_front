@@ -87,6 +87,8 @@ export default function Cashbook() {
     const firstWeek = today.clone().startOf('month').week();
     const lastWeek = today.clone().endOf('month').week() == 1 ? 53: today.clone().endOf('month').week();
 
+    let incomeValue = [];
+
     const calendarArr = () => {
       let result = [];
       let week = firstWeek;
@@ -99,47 +101,56 @@ export default function Cashbook() {
           method: 'GET',
           headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
         }).then((response)=>{
-            console.log(response);
+          const value = response.data.map(data=>{
+            if(data.cashbookInfo === '수입'){
+              return data.cashbookDay;
+            }
+          });
+
+          console.log(value);
+
+          incomeValue.concat(value);
         });
+
+        for(week; week<=lastWeek; week++){  
+          result = result.concat(
+            <tr key={week}>
+              {
+                Array(7).fill(0).map((data, index)=>{
+                  let days = today.clone().startOf('year').week(week).startOf('week').add(index, 'day');
+                  
+                  if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
+                    return(
+                      <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
+                        <span>{days.format('D')}</span>
+                      </td>
+                    );
+                  } else if(days.format('MM') !== today.format('MM')){
+                    return(
+                      <td key={index} style={{backgroundColor:'#D5D5D5', color: '#A6A6A6'}}>
+                        <span>{days.format('D')}</span>
+                      </td>
+                    );
+                  } else{
+                    return(
+                      <td key={index} style={{backgroundColor: '#F6F6F6'}}>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                        <div>
+                          
+                        </div>
+                        <div>
+                          123
+                        </div>
+                      </td>
+                    );
+                  }
+                })
+              }
+            </tr>
+          );
+        }
       }
 
-      for(week; week<=lastWeek; week++){
-        result = result.concat(
-          <tr key={week}>
-            {
-              Array(7).fill(0).map((data, index)=>{
-                let days = today.clone().startOf('year').week(week).startOf('week').add(index, 'day');
-                
-                if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
-                  return(
-                    <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
-                      <span>{days.format('D')}</span>
-                    </td>
-                  );
-                } else if(days.format('MM') !== today.format('MM')){
-                  return(
-                    <td key={index} style={{backgroundColor:'#D5D5D5', color: '#A6A6A6'}}>
-                      <span>{days.format('D')}</span>
-                    </td>
-                  );
-                } else{
-                  return(
-                    <td key={index} style={{backgroundColor: '#F6F6F6'}}>
-                      <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
-                      <div>
-                        123
-                      </div>
-                      <div>
-                        123
-                      </div>
-                    </td>
-                  );
-                }
-              })
-            }
-          </tr>
-        );
-      }
       return result;
     }
 
