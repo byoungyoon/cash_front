@@ -88,6 +88,7 @@ export default function Cashbook() {
     const lastWeek = today.clone().endOf('month').week() == 1 ? 53: today.clone().endOf('month').week();
 
     let incomeValue = [];
+    let outcomeValue = [];
 
     const calendarArr = () => {
       let result = [];
@@ -101,18 +102,17 @@ export default function Cashbook() {
           method: 'GET',
           headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
         }).then((response)=>{
-          const value = response.data.map(data=>{
-            if(data.cashbookInfo === '수입'){
-              return data.cashbookDay;
+            for(let i=0; i<response.data.length; i++){
+              if(response.data[i].cashbookInfo === '수입'){
+                incomeValue.push(response.data[i].cashbookDay);
+              } else{
+                outcomeValue.push(response.data[i].cashbookDay);
+              }
             }
-          });
-
-          console.log(value);
-
-          incomeValue.concat(value);
         });
 
         for(week; week<=lastWeek; week++){  
+          console.log(incomeValue);
           result = result.concat(
             <tr key={week}>
               {
