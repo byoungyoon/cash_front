@@ -86,71 +86,91 @@ export default function Cashbook() {
     
     const firstWeek = today.clone().startOf('month').week();
     const lastWeek = today.clone().endOf('month').week() == 1 ? 53: today.clone().endOf('month').week();
+    let week = firstWeek;
 
-    let incomeValue = [];
-    let outcomeValue = [];
+    let currentMonth = today.clone().startOf('year').week(week).startOf('week').add(7, 'day').format('YYYY-M');
 
-    const calendarArr = () => {
-      let result = [];
-      let week = firstWeek;
+    const [comeValue, setComeValue] = useState({
+      incomeValue : [],
+      incomePrice: [],
+      outcomeValue : [],
+      outcomePrice: []
+    });
 
-      let currentMonth = today.clone().startOf('year').week(week).startOf('week').add(7, 'day').format('YYYY-M');
-      
-      if(cookie.rememberJwt != undefined){
-        axios({
-          url: 'http://localhost:8080/user/getCashbook?currentMonth=' + currentMonth,
-          method: 'GET',
-          headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
-        }).then((response)=>{
-            for(let i=0; i<response.data.length; i++){
-              if(response.data[i].cashbookInfo === '수입'){
-                incomeValue.push(response.data[i].cashbookDay);
-              } else{
-                outcomeValue.push(response.data[i].cashbookDay);
-              }
-            }
+    useEffect(()=>{
+      axios({
+        url: 'http://localhost:8080/user/getCashbook?currentMonth=' + currentMonth,
+        method: 'GET',
+        headers: {'Authorization' : "Bearer " + cookie.rememberJwt}
+      }).then((res)=>{
+        const value = [];
+        setComeValue({
+          ['incomeValue']: value.concat(res.data.map(data=>{
+          if(data.cashbookInfo == '수입'){
+            return data.cashbookDay;
+          }})),
+          ['outcomeValue']: value.concat(res.data.map(data=>{
+            if(data.cashbookInfo == '지출'){
+              return data.cashbookDay;
+          }})),
+          ['incomePrice']: value.concat(res.data.map(data=>{
+            if(data.cashbookInfo == '수입'){
+              return data.cashbookPrice;
+          }})),
+          ['outcomePrice']: value.concat(res.data.map(data=>{
+            if(data.cashbookInfo == '지출'){
+              return data.cashbookPrice;
+          }})),
         });
+      });
+    },[getMoment])
+    
+    const calendarArr = () => {
+      console.log(comeValue);
+      let result = [];
 
-        for(week; week<=lastWeek; week++){  
-          console.log(incomeValue);
-          result = result.concat(
-            <tr key={week}>
-              {
-                Array(7).fill(0).map((data, index)=>{
-                  let days = today.clone().startOf('year').week(week).startOf('week').add(index, 'day');
-                  
-                  if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
-                    return(
-                      <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
-                        <span>{days.format('D')}</span>
-                      </td>
-                    );
-                  } else if(days.format('MM') !== today.format('MM')){
-                    return(
-                      <td key={index} style={{backgroundColor:'#D5D5D5', color: '#A6A6A6'}}>
-                        <span>{days.format('D')}</span>
-                      </td>
-                    );
-                  } else{
+      for(week; week<=lastWeek; week++){  
+        result = result.concat(
+          <tr key={week}>
+            {
+              Array(7).fill(0).map((data, index)=>{
+                let days = today.clone().startOf('year').week(week).startOf('week').add(index, 'day');
+                
+                if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
+                  return(
+                    <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
+                      <span>{days.format('D')}</span>
+                    </td>
+                  );
+                } else if(days.format('MM') !== today.format('MM')){
+                  return(
+                    <td key={index} style={{backgroundColor:'#D5D5D5', color: '#A6A6A6'}}>
+                      <span>{days.format('D')}</span>
+                    </td>
+                  );
+                } else{
+                  if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
                         <div>
-                          
+                          수입 : {comeValue.incomePrice[comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1)]}
                         </div>
-                        <div>
-                          123
-                        </div>
+                      </td>
+                    )
+                  } else{
+                    return(
+                      <td key={index} style={{backgroundColor: '#F6F6F6'}}>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
                       </td>
                     );
                   }
-                })
-              }
-            </tr>
-          );
-        }
+                }
+              })
+            }
+          </tr>
+        );
       }
-
       return result;
     }
 
