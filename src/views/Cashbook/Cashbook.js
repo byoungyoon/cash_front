@@ -13,6 +13,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useCookies} from 'react-cookie';
 import axios from "axios";
+import {getCashbookDetail, Test2} from "./Cashbook-Service";
 
 const styles = {
     cardCategoryWhite: {
@@ -71,6 +72,9 @@ const styles = {
     },
     colorBlue: {
       color: "blue"
+    },
+    tableFixed: {
+      tableLayout: "fixed"
     }
   };
 
@@ -96,6 +100,12 @@ export default function Cashbook() {
       outcomeValue : [],
       outcomePrice: []
     });
+
+    const [getOne, setGetOne] = useState(true);
+
+    const handleCashbookDetail = (day) => () => {
+      console.log(getCashbookDetail(currentMonth, day, cookie.rememberJwt));
+    };
 
     useEffect(()=>{
       axios({
@@ -126,7 +136,6 @@ export default function Cashbook() {
     },[getMoment])
     
     const calendarArr = () => {
-      console.log(comeValue);
       let result = [];
 
       for(week; week<=lastWeek; week++){  
@@ -149,12 +158,36 @@ export default function Cashbook() {
                     </td>
                   );
                 } else{
-                  if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                  if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1 &&
+                      comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                    return(
+                      <td key={index} style={{backgroundColor: '#F6F6F6'}}>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
+                            <button type="button" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</button>
+                          </span>
+                        <div>
+                          수입 : {comeValue.incomePrice[comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1)]}
+                        </div>
+                        <div>
+                          지출 : {comeValue.outcomePrice[comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1)]}
+                        </div>
+                      </td>
+                    )
+                  } else if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
                         <div>
                           수입 : {comeValue.incomePrice[comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1)]}
+                        </div>
+                      </td>
+                    )
+                  } else if(comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                    return(
+                      <td key={index} style={{backgroundColor: '#F6F6F6'}}>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                        <div>
+                          지출 : {comeValue.outcomePrice[comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1)]}
                         </div>
                       </td>
                     )
@@ -193,22 +226,29 @@ export default function Cashbook() {
                           </p>
                       </CardHeader>
                       <CardBody>
-                          <div className={classes.center}>
-                            <IconButton onClick={handleSubstractClick}>
-                              <ChevronLeftIcon />
-                            </IconButton>
-                            <span>{today.format('YYYY년 MM월')}</span>
-                            <IconButton onClick={handleAddClick}>
-                              <ChevronRightIcon />
-                            </IconButton>
-                          </div>
-                          <div className={classes.tableStyle}>
-                            <table>
-                              <tbody>
-                                {calendarArr()}
-                              </tbody>
-                            </table>
-                          </div>
+                        <GridContainer>
+                          <GridItem xs={getOne?6:12} sm={getOne?6:12} md={getOne?6:12}>
+                            <div className={classes.center}>
+                              <IconButton onClick={handleSubstractClick}>
+                                <ChevronLeftIcon />
+                              </IconButton>
+                              <span>{today.format('YYYY년 MM월')}</span>
+                              <IconButton onClick={handleAddClick}>
+                                <ChevronRightIcon />
+                              </IconButton>
+                            </div>
+                            <div className={classes.tableStyle}>
+                              <table className={classes.tableFixed}>
+                                <tbody>
+                                  {calendarArr()}
+                                </tbody>
+                              </table>
+                            </div>
+                          </GridItem>
+                          {getOne &&(
+                            <Test2 />
+                          )}
+                        </GridContainer>
                       </CardBody>
                   </Card>
               </GridItem>
