@@ -13,7 +13,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useCookies} from 'react-cookie';
 import axios from "axios";
-import {getCashbookDetail, Test2} from "./Cashbook-Service";
+import CashbookDetail from "./Cashbook-Detail";
 
 const styles = {
     cardCategoryWhite: {
@@ -101,10 +101,16 @@ export default function Cashbook() {
       outcomePrice: []
     });
 
-    const [getOne, setGetOne] = useState(true);
+    const [getOne, setGetOne] = useState(false);
+
+    const [getOneData, setGetOneData] = useState({
+      month: '',
+      day: '',
+    });
 
     const handleCashbookDetail = (day) => () => {
-      console.log(getCashbookDetail(currentMonth, day, cookie.rememberJwt));
+      setGetOneData({month: currentMonth, day: day}); 
+      setGetOne(data=>!data);
     };
 
     useEffect(()=>{
@@ -246,7 +252,7 @@ export default function Cashbook() {
                             </div>
                           </GridItem>
                           {getOne &&(
-                            <Test2 />
+                            <CashbookDetail month={getOneData.month} day={getOneData.day} token={cookie.rememberJwt} />
                           )}
                         </GridContainer>
                       </CardBody>
