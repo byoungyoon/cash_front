@@ -110,7 +110,7 @@ export default function Cashbook() {
 
     const handleCashbookDetail = (day) => () => {
       setGetOneData({month: currentMonth, day: day}); 
-      setGetOne(data=>!data);
+      setGetOne(getOne=>!getOne);
     };
 
     useEffect(()=>{
@@ -252,7 +252,8 @@ export default function Cashbook() {
                             </div>
                           </GridItem>
                           {getOne &&(
-                            <CashbookDetail month={getOneData.month} day={getOneData.day} token={cookie.rememberJwt} />
+                              <CashbookDetail month={getOneData.month} day={getOneData.day} token={cookie.rememberJwt} />
+
                           )}
                         </GridContainer>
                       </CardBody>

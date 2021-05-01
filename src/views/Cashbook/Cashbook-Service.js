@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React from 'react';
 
-function getCashbookDetail(month, day, token){
+async function getCashbookDetail(month, day, token){
     let currentDay = month + '-' + day;
     let value;
-    axios({
+    await axios({
         url: 'http://localhost:8080/user/getCashbookDetail?currentDay=' + currentDay,
         method: 'GET',
         headers: {'Authorization' : "Bearer " + token}
