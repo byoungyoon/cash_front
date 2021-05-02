@@ -1,23 +1,23 @@
+import { FirstPageRounded } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import * as Service from "./Cashbook-Service";
 
 export default function CashbookDetail({month, day, token}){    
     let getValue = Service.getCashbookDetail(month, day, token);
+    let returnValue = '';
     
-    const frist = () => {
+    const first = async () => {
         let getValueArr = [];
-        getValue.then((response)=>{
+        await getValue.then((response)=>{
             let value = [];
             response.map((data, key)=>{
                 value.push(data);
             });
             getValueArr = getValueArr.concat(value);
-            let returnValue = second(getValueArr);
-            console.log(returnValue);
-            return returnValue;
+            returnValue = second(getValueArr);
         });
-        return getValueArr;
-    }
+        return returnValue;
+    };
 
     const second = (getValueArr) => {
         let result = getValueArr.map((data, key) => {
@@ -27,9 +27,11 @@ export default function CashbookDetail({month, day, token}){
         return(<div>{result}</div>);
     };
 
+    console.log(setTimeout(()=>first()));
+
     return(
         <div>
-            {frist()}
+            {setTimeout(()=>first())}
         </div>
     );
 }
