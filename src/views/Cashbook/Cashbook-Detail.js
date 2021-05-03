@@ -1,37 +1,51 @@
-import { FirstPageRounded } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import * as Service from "./Cashbook-Service";
+import {DataGrid} from '@material-ui/data-grid';
 
 export default function CashbookDetail({month, day, token}){    
-    let getValue = Service.getCashbookDetail(month, day, token);
-    let returnValue = '';
-    
-    const first = async () => {
-        let getValueArr = [];
-        await getValue.then((response)=>{
-            let value = [];
-            response.map((data, key)=>{
-                value.push(data);
+    const [returnValue, setReturnValue] = useState();
+    useEffect(()=>{
+        let getValue = Service.getCashbookDetail(month, day, token);
+        const first = async () => {
+            let getValueArr = [];
+            await getValue.then((response)=>{
+                let value = [];
+                response.map((data, key)=>{
+                    value.push(data);
+                });
+                getValueArr = getValueArr.concat(value);
             });
-            getValueArr = getValueArr.concat(value);
-            returnValue = second(getValueArr);
+            setReturnValue(getValueArr);
+            return getValueArr;
+        };
+        first();
+    },[])
+
+    const columns = [
+        {field: 'cashbookNo', headerName: '번호', width: 70},
+        {field: 'cashbookInfo', headerName: '총계', width: 130},
+        {field: 'cashbookTitle', headerName: '내용', width: 130},
+        {field: 'cashbookPrice', headerName: '가격', width: 130},
+        {field: 'cashbookContent', headerName: '내용', width: 130}
+    ];
+
+    const handleValue = () => {
+        let value = returnValue.map((data, key)=>{
+            return data;
         });
-        return returnValue;
+        
+        return {value};
     };
 
-    const second = (getValueArr) => {
-        let result = getValueArr.map((data, key) => {
-            return (<div key={key}>{data}</div>)
-        }); 
-
-        return(<div>{result}</div>);
-    };
-
-    console.log(setTimeout(()=>first()));
-
-    return(
-        <div>
-            {setTimeout(()=>first())}
-        </div>
-    );
+    if(returnValue != undefined){
+        return(
+          <div style={{height: 400, width: '100%'}}>
+              <DataGrid rows={handleValue()} columns={columns} pageSize={5} checkboxSelection />
+          </div>  
+        );
+    } else{
+        return(
+            <></>
+        )
+    }
 }
