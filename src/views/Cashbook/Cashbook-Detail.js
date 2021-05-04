@@ -19,28 +19,22 @@ export default function CashbookDetail({month, day, token}){
             return getValueArr;
         };
         first();
-    },[])
-
-    const columns = [
-        {field: 'cashbookNo', headerName: '번호', width: 70},
-        {field: 'cashbookInfo', headerName: '총계', width: 130},
-        {field: 'cashbookTitle', headerName: '내용', width: 130},
-        {field: 'cashbookPrice', headerName: '가격', width: 130},
-        {field: 'cashbookContent', headerName: '내용', width: 130}
-    ];
-
-    const handleValue = () => {
-        let value = returnValue.map((data, key)=>{
-            return data;
-        });
-        
-        return {value};
-    };
+    },[]);
 
     if(returnValue != undefined){
+        const columns = [
+            {field: 'id', headerName: 'no', type: 'number'},
+            {field: 'cashbookInfo', headerName: '총계'},
+            {field: 'cashbookTitle', headerName: '내용'},
+            {field: 'cashbookPrice', headerName: '가격', type: 'number'},
+            {field: 'cashbookContent', headerName: '내용'},
+        ];
+    
+        const rows = returnValue.map(data=>data);
+
         return(
           <div style={{height: 400, width: '100%'}}>
-              <DataGrid rows={handleValue()} columns={columns} pageSize={5} checkboxSelection />
+              <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
           </div>  
         );
     } else{
