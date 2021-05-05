@@ -14,6 +14,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useCookies} from 'react-cookie';
 import axios from "axios";
 import CashbookDetail from "./Cashbook-Detail";
+import Button from '@material-ui/core/Button';
 
 const styles = {
     cardCategoryWhite: {
@@ -154,13 +155,17 @@ export default function Cashbook() {
                 if(Moment().format('YYYYMMDD') === days.format('YYYYMMDD')){
                   return(
                     <td key={index} style={{border: "3px solid #D1B2FF", backgroundColor: '#F6F6F6'}}>
-                      <span>{days.format('D')}</span>
+                      <span>
+                        <Button variant="contained" size="small" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</Button>
+                      </span>
                     </td>
                   );
                 } else if(days.format('MM') !== today.format('MM')){
                   return(
                     <td key={index} style={{backgroundColor:'#D5D5D5', color: '#A6A6A6'}}>
-                      <span>{days.format('D')}</span>
+                      <span>
+                        {days.format('D')}
+                      </span>
                     </td>
                   );
                 } else{
@@ -169,7 +174,7 @@ export default function Cashbook() {
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
-                            <button type="button" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</button>
+                          <Button variant="contained" size="small" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</Button>
                           </span>
                         <div>
                           수입 : {comeValue.incomePrice[comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1)]}
@@ -182,7 +187,9 @@ export default function Cashbook() {
                   } else if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
-                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
+                          <Button variant="contained" size="small" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</Button>
+                        </span>
                         <div>
                           수입 : {comeValue.incomePrice[comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1)]}
                         </div>
@@ -191,7 +198,9 @@ export default function Cashbook() {
                   } else if(comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
-                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
+                          <Button variant="contained" size="small" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</Button>
+                        </span>
                         <div>
                           지출 : {comeValue.outcomePrice[comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1)]}
                         </div>
@@ -200,7 +209,9 @@ export default function Cashbook() {
                   } else{
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
-                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>{days.format('D')}</span>
+                        <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
+                          <Button variant="contained" size="small" onClick={handleCashbookDetail(days.format('D'))}>{days.format('D')}</Button>
+                        </span>
                       </td>
                     );
                   }

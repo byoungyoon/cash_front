@@ -23,7 +23,7 @@ export default function CashbookDetail({month, day, token}){
 
     if(returnValue != undefined){
         const columns = [
-            {field: 'id', headerName: 'no', type: 'number'},
+            {field: 'id', headerName: 'no', type: 'number', width: 70},
             {field: 'cashbookInfo', headerName: '총계'},
             {field: 'cashbookTitle', headerName: '내용'},
             {field: 'cashbookPrice', headerName: '가격', type: 'number'},
@@ -33,7 +33,7 @@ export default function CashbookDetail({month, day, token}){
         const rows = returnValue.map(data=>data);
 
         return(
-          <div style={{height: 400, width: '100%'}}>
+          <div style={{height: 400, width: '50%'}}>
               <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
           </div>  
         );
