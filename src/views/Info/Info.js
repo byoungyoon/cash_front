@@ -17,11 +17,8 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { FormControl, InputLabel, Select, TextField } from "@material-ui/core";
 
 import {
-    dailySalesChart,
     incomeChart,
-    completedTasksChart
   } from "variables/charts.js";
-import { SystemUpdate } from "@material-ui/icons";
 
 const styles = (theme) =>({
     cardCategoryWhite: {
@@ -260,7 +257,7 @@ export default function Info(){
                         {modifyForm &&(
                         <>
                             <CardAvatar profile>
-                                <img src={imgBase64} /> 
+                                <img src={imgBase64} alt="userImg" /> 
                             </CardAvatar>
                             <Fragment>
                                 <input
@@ -334,7 +331,7 @@ export default function Info(){
                         {!modifyForm &&(
                         <>
                             <CardAvatar profile>
-                                <img src={values.userImg} /> 
+                                <img src={values.userImg} alt="userImg" /> 
                             </CardAvatar>
                             <CardBody profile>
                                 <h6 className={classes.cardCategory}>{values.userGender} / {values.userPhone}</h6>

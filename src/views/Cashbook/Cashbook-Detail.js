@@ -12,6 +12,7 @@ export default function CashbookDetail({month, day, token}){
                 let value = [];
                 response.map((data, key)=>{
                     value.push(data);
+                    return data;
                 });
                 getValueArr = getValueArr.concat(value);
             });
@@ -21,7 +22,7 @@ export default function CashbookDetail({month, day, token}){
         first();
     },[]);
 
-    if(returnValue != undefined){
+    if(returnValue !== undefined){
         const columns = [
             {field: 'id', headerName: 'no', type: 'number', width: 70},
             {field: 'cashbookInfo', headerName: '총계'},

@@ -90,7 +90,7 @@ export default function Cashbook() {
     const today = getMoment;
     
     const firstWeek = today.clone().startOf('month').week();
-    const lastWeek = today.clone().endOf('month').week() == 1 ? 53: today.clone().endOf('month').week();
+    const lastWeek = today.clone().endOf('month').week() === 1 ? 53: today.clone().endOf('month').week();
     let week = firstWeek;
 
     let currentMonth = today.clone().startOf('year').week(week).startOf('week').add(7, 'day').format('YYYY-M');
@@ -122,22 +122,26 @@ export default function Cashbook() {
       }).then((res)=>{
         const value = [];
         setComeValue({
-          ['incomeValue']: value.concat(res.data.map(data=>{
-          if(data.cashbookInfo == '수입'){
+          'incomeValue': value.concat(res.data.map(data=>{
+          if(data.cashbookInfo === '수입'){
             return data.cashbookDay;
-          }})),
-          ['outcomeValue']: value.concat(res.data.map(data=>{
-            if(data.cashbookInfo == '지출'){
+          } else return null;
+          })),
+          'outcomeValue': value.concat(res.data.map(data=>{
+            if(data.cashbookInfo === '지출'){
               return data.cashbookDay;
-          }})),
-          ['incomePrice']: value.concat(res.data.map(data=>{
-            if(data.cashbookInfo == '수입'){
+          } else return null;
+          })),
+          'incomePrice': value.concat(res.data.map(data=>{
+            if(data.cashbookInfo === '수입'){
               return data.cashbookPrice;
-          }})),
-          ['outcomePrice']: value.concat(res.data.map(data=>{
-            if(data.cashbookInfo == '지출'){
+          } else return null;
+          })),
+          'outcomePrice': value.concat(res.data.map(data=>{
+            if(data.cashbookInfo === '지출'){
               return data.cashbookPrice;
-          }})),
+          } else return null;
+          })),
         });
       });
     },[getMoment])
@@ -169,8 +173,8 @@ export default function Cashbook() {
                     </td>
                   );
                 } else{
-                  if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1 &&
-                      comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                  if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) !== -1 &&
+                      comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) !== -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
@@ -184,7 +188,7 @@ export default function Cashbook() {
                         </div>
                       </td>
                     )
-                  } else if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                  } else if(comeValue.incomeValue.findIndex(data=> data===days.format('D') * 1) !== -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
@@ -195,7 +199,7 @@ export default function Cashbook() {
                         </div>
                       </td>
                     )
-                  } else if(comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) != -1){
+                  } else if(comeValue.outcomeValue.findIndex(data=> data===days.format('D') * 1) !== -1){
                     return(
                       <td key={index} style={{backgroundColor: '#F6F6F6'}}>
                         <span className={index===0?classes.colorBlue: index===6?classes.colorRed: classes.colorBlack}>
