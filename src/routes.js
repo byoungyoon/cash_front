@@ -21,6 +21,7 @@ import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import ImportContactsIcon from "@material-ui/icons/ImportContacts";
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
@@ -85,7 +86,7 @@ const dashboardRoutes = [
     path: "/Login",
     name: "Login",
     rtlName: "إخطارات",
-    icon: Notifications,
+    icon: LockOpenIcon,
     component: LoginPage,
     layout: "/admin"
   },
