@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 
-const styles = makeStyles((theme)=>({
+const styles = (theme) => ({
     model:{
-        display: 'none',
+        display: 'flex',
         position: 'fixed',
         top: '0',
         right: '0',
@@ -22,7 +22,6 @@ const styles = makeStyles((theme)=>({
             margin: '0 auto',
             borderRadius: '.3rem',
             backgroundColor: '#fff',
-            animation: 'modal-show .3s',
             overflow: 'hidden'
         },
         "& > section > header": {
@@ -46,14 +45,43 @@ const styles = makeStyles((theme)=>({
             padding: '16px',
             borderBottom: '1px solid #dee2e6',
             borderTop: '1px solid #dee2e6'
-        }
-    },
-
-}));
+        },
+        "& > section > footer": {
+            padding: '12px 16px',
+            textAligin: 'right'
+        },
+        "& > section > footer button": {
+            padding: '6px 12px',
+            color: '#fff',
+            backgroundColor: '#6c757d',
+            borderRadius: '5px',
+            fontSize: '13px'
+        },
+    }
+});
 const useStyles = makeStyles(styles);
 
-const AddGuestBook = () =>{
+const AddGuestBook = (props) =>{
+    const classes = useStyles();
+    const {open, close} = props;
 
+    return(
+        <div className={open ? classes.model : null}>
+            {open && (
+                <section>
+                    <header>
+                        <button onClick={close}>&times;</button>
+                    </header>
+                    <main>
+                        {props.children}
+                    </main>
+                    <footer>
+                        <button onClick={close}>close</button>
+                    </footer>
+                </section>
+            )}
+        </div>
+    );
 }
 
 export default AddGuestBook;

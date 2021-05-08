@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search'; 
 import ReplayIcon from '@material-ui/icons/Replay';
+import AddGuestBook from './AddGuestBook';
 
 const useStyles = makeStyles((theme)=> ({
     icones:{
@@ -39,19 +40,33 @@ const useStyles = makeStyles((theme)=> ({
 
 export default function GuestBook(){
     const classes = useStyles();
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModel = () => {
+        setModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+
     return(
         <>
         <div className={classes.icones}>
-            <IconButton aria-lebel="Add">
+            <IconButton aria-lebel="add" onClick={openModel}>
                 <AddIcon fontSize="large" />
             </IconButton>
-            <IconButton aria-lebel="Replay" >
+            <IconButton aria-lebel="replay" >
                 <ReplayIcon fontSize="large" />
             </IconButton>
-            <IconButton aria-lebel="Search">
+            <IconButton aria-lebel="search">
                 <SearchIcon fontSize="large" />
             </IconButton>
         </div>
+            <AddGuestBook open={modalOpen} close={closeModal}>
+                testestestestestse
+            </AddGuestBook> 
         <div className={classes.root}>
             <Grid container>
                 <Grid item xs={12} md={6}>
