@@ -18,22 +18,19 @@ const styles = (theme) => ({
         },
         "& > section": {
             width: '90%',
-            maxWidth: '450px',
-            margin: '0 auto',
+            maxWidth: '520px',
+            maxHeight: '500px',
+            margin: '5em auto',
             borderRadius: '.3rem',
             backgroundColor: '#fff',
             overflow: 'hidden'
         },
         "& > section > header": {
-            positon: 'relative',
             padding: '16px 64px 16px 16px',
             backgroundColor: '#f1f1f1',
             fontWeight: '700'
         },
         "& > section > header button": {
-            position: 'absolute',
-            top: '15px',
-            right: '15px',
             width: '30px',
             fontSize: '21px',
             fontWeight: '700',
@@ -48,7 +45,6 @@ const styles = (theme) => ({
         },
         "& > section > footer": {
             padding: '12px 16px',
-            textAligin: 'right'
         },
         "& > section > footer button": {
             padding: '6px 12px',

@@ -6,6 +6,10 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search'; 
@@ -35,6 +39,10 @@ const useStyles = makeStyles((theme)=> ({
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%'
+    },
+    inputWidth: {
+        width: '100%',
+        margin: 'auto auto 8px auto'
     }
 }));
 
@@ -64,9 +72,33 @@ export default function GuestBook(){
                 <SearchIcon fontSize="large" />
             </IconButton>
         </div>
-            <AddGuestBook open={modalOpen} close={closeModal}>
-                testestestestestse
-            </AddGuestBook> 
+        <AddGuestBook open={modalOpen} close={closeModal}>
+            <Grid container>
+                <Grid item xs={4}>
+                    <ButtonBase className={classes.image}>
+                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                    </ButtonBase>
+                </Grid>
+                <Grid item xs={8}>
+                    <TextField
+                        className={classes.inputWidth} 
+                        label="Title"
+                        id="input-title"
+                        margin="normal"
+                        variant="outlined"
+                    />
+                    <TextField 
+                        className={classes.inputWidth}
+                        label="Content"
+                        id="input-content"
+                        margin="normal"
+                        variant="outlined"
+                        multiline
+                        rows={5}
+                    />
+                </Grid>
+            </Grid>
+        </AddGuestBook> 
         <div className={classes.root}>
             <Grid container>
                 <Grid item xs={12} md={6}>
