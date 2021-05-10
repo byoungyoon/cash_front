@@ -12,8 +12,14 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search'; 
 import ReplayIcon from '@material-ui/icons/Replay';
 import AddGuestBook from './AddGuestBook';
+import DetailGuestBook from './DetailGuestBook';
 
 const useStyles = makeStyles((theme)=> ({
+    main: {
+        width: '100%', 
+        heigth: '100%', 
+        position: 'relative'
+    },
     icones:{
         textAlign: 'right',
         margin: '0 2.3em 0em 0',
@@ -47,6 +53,7 @@ export default function GuestBook(){
     const classes = useStyles();
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [detailModalOpen, setDetailModalOpen] = useState(false);
     const [state, setState] = useState({
         title: '',
         content: '',
@@ -92,272 +99,284 @@ export default function GuestBook(){
         console.log(state);
     }
 
+    const handleOneOnCilck = () => {
+        setDetailModalOpen(true);
+    }
+
+    const handleOneCloseOnClick = () => {
+        setDetailModalOpen(false);
+    }
+
     return(
-        <>
-        <div className={classes.icones}>
-            <IconButton aria-label="add" onClick={openModel}>
-                <AddIcon fontSize="large" />
-            </IconButton>
-            <IconButton aria-label="replay" onClick={()=>window.location.href='/admin/guestbook'}>
-                <ReplayIcon fontSize="large" />
-            </IconButton>
-            <IconButton aria-label="search">
-                <SearchIcon fontSize="large" />
-            </IconButton>
-        </div>
-        <AddGuestBook open={modalOpen} close={closeModal} handleAddGuestbook={handleAddGuestbook}>
-            <Grid container>
-                <Grid item xs={4}>
-                    <ButtonBase className={classes.image} >
-                        <input 
-                            id="input-file" 
-                            type="file" 
-                            accept=".gif, .jpg, .png"
-                            onChange={handleFileOnChange}
-                            style={{display: 'none'}} 
-                        />
-                        <label htmlFor="input-file">
-                            <img 
-                                className={classes.img} 
-                                alt="image" 
-                                src={state.previewURL} 
-                                style={{cursor: 'pointer'}}
+        <div className={classes.main}>
+            <div className={classes.icones}>
+                <IconButton aria-label="add" onClick={openModel}>
+                    <AddIcon fontSize="large" />
+                </IconButton>
+                <IconButton aria-label="replay" onClick={()=>window.location.href='/admin/guestbook'}>
+                    <ReplayIcon fontSize="large" />
+                </IconButton>
+                <IconButton aria-label="search">
+                    <SearchIcon fontSize="large" />
+                </IconButton>
+            </div>
+            <AddGuestBook open={modalOpen} close={closeModal} handleAddGuestbook={handleAddGuestbook}>
+                <Grid container>
+                    <Grid item xs={4}>
+                        <ButtonBase className={classes.image} >
+                            <input 
+                                id="input-file" 
+                                type="file" 
+                                accept=".gif, .jpg, .png"
+                                onChange={handleFileOnChange}
+                                style={{display: 'none'}} 
                             />
-                            <span>gif, jpg, png만 <br />선택 가능합니다</span>
-                        </label>
-                    </ButtonBase>
+                            <label htmlFor="input-file">
+                                <img 
+                                    className={classes.img} 
+                                    alt="image" 
+                                    src={state.previewURL} 
+                                    style={{cursor: 'pointer'}}
+                                />
+                                <span>gif, jpg, png만 <br />선택 가능합니다</span>
+                            </label>
+                        </ButtonBase>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <TextField
+                            className={classes.inputWidth} 
+                            label="Title"
+                            id="input-title"
+                            error={state.title===""? true: false}
+                            margin="normal"
+                            variant="outlined"
+                            defaultValue={state.title}
+                            onChange={handleContentOnChange('title')}
+                        />
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="Content"
+                            id="input-content"
+                            margin="normal"
+                            variant="outlined"
+                            multiline
+                            rows={5}
+                            error={state.content===""? true: false}
+                            defaultValue={state.content}
+                            onChange={handleContentOnChange('content')}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={8}>
-                    <TextField
-                        className={classes.inputWidth} 
-                        label="Title"
-                        id="input-title"
-                        error={state.title===""? true: false}
-                        margin="normal"
-                        variant="outlined"
-                        defaultValue={state.title}
-                        onChange={handleContentOnChange('title')}
-                    />
-                    <TextField 
-                        className={classes.inputWidth}
-                        label="Content"
-                        id="input-content"
-                        margin="normal"
-                        variant="outlined"
-                        multiline
-                        rows={5}
-                        error={state.content===""? true: false}
-                        defaultValue={state.content}
-                        onChange={handleContentOnChange('content')}
-                    />
-                </Grid>
-            </Grid>
-        </AddGuestBook> 
-        <div className={classes.root}>
-            <Grid container>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Title
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Content
-                                        </Typography>
+            </AddGuestBook>
+            <DetailGuestBook 
+                open={detailModalOpen}
+                close={setDetailModalOpen}
+            />
+            <div className={classes.root}>
+                <Grid container>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
+                                <Grid item>
+                                    <ButtonBase className={classes.image} onClick={handleOneOnCilck}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
+                                </Grid>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Title
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                Content
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2">
+                                                date
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2">
-                                            date
-                                        </Typography>
+                                        <Typography color="textSecondary">userId</Typography>
                                     </Grid>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    <Typography color="textSecondary">userId</Typography>
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
-                                        </Typography>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Standard license
+                                            </Typography>
+                                            <Typography variant="body2" gutterBottom>
+                                                Full resolution 1920*1080 . JPEG
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                ID: 1030114
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2" style={{custor: 'pointer'}}>
+                                                Remove
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
-                                        </Typography>
+                                        <Typography variant="subtitle1">$19.00</Typography>
                                     </Grid>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
-                                        </Typography>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Standard license
+                                            </Typography>
+                                            <Typography variant="body2" gutterBottom>
+                                                Full resolution 1920*1080 . JPEG
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                ID: 1030114
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2" style={{custor: 'pointer'}}>
+                                                Remove
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
-                                        </Typography>
+                                        <Typography variant="subtitle1">$19.00</Typography>
                                     </Grid>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
-                                        </Typography>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Standard license
+                                            </Typography>
+                                            <Typography variant="body2" gutterBottom>
+                                                Full resolution 1920*1080 . JPEG
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                ID: 1030114
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2" style={{custor: 'pointer'}}>
+                                                Remove
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
-                                        </Typography>
+                                        <Typography variant="subtitle1">$19.00</Typography>
                                     </Grid>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
-                                        </Typography>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Standard license
+                                            </Typography>
+                                            <Typography variant="body2" gutterBottom>
+                                                Full resolution 1920*1080 . JPEG
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                ID: 1030114
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2" style={{custor: 'pointer'}}>
+                                                Remove
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
-                                        </Typography>
+                                        <Typography variant="subtitle1">$19.00</Typography>
                                     </Grid>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                                    </ButtonBase>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
-                                        </Typography>
+                                <Grid item xs sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography gutterBottom variant="subtitle1">
+                                                Standard license
+                                            </Typography>
+                                            <Typography variant="body2" gutterBottom>
+                                                Full resolution 1920*1080 . JPEG
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                ID: 1030114
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="body2" style={{custor: 'pointer'}}>
+                                                Remove
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
-                                        </Typography>
+                                        <Typography variant="subtitle1">$19.00</Typography>
                                     </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
-                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-            </Grid>     
+                        </Paper>
+                    </Grid>
+                </Grid>     
+            </div>
         </div>
-        </>
     );
 }
