@@ -6,9 +6,6 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -31,8 +28,8 @@ const useStyles = makeStyles((theme)=> ({
         maxWidth: 500
     },
     image: {
-        width: 128,
-        height: 128
+        width: 140,
+        height: 175
     },
     img: {
         margin: 'auto',
@@ -50,6 +47,12 @@ export default function GuestBook(){
     const classes = useStyles();
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [state, setState] = useState({
+        title: '',
+        content: '',
+        file: '',
+        previewURL: process.env.PUBLIC_URL + '/images/selectImage.png'
+    });
 
     const openModel = () => {
         setModalOpen(true);
@@ -57,26 +60,71 @@ export default function GuestBook(){
 
     const closeModal = () => {
         setModalOpen(false);
+        setState({
+            title: '',
+            content: '',
+            file: '',
+            previewURL: process.env.PUBLIC_URL + '/images/selectImage.png'
+        })
+    }
+
+    const handleFileOnChange = (event) => {
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        reader.onloadend = () => {
+            setState({
+                ...state,
+                file: file,
+                previewURL: reader.result
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+
+    const handleContentOnChange = (prop) => (event) => {
+        setState({
+            ...state,
+            [prop]: event.target.value
+        });
+    }
+
+    const handleAddGuestbook = () => {
+        console.log(state);
     }
 
     return(
         <>
         <div className={classes.icones}>
-            <IconButton aria-lebel="add" onClick={openModel}>
+            <IconButton aria-label="add" onClick={openModel}>
                 <AddIcon fontSize="large" />
             </IconButton>
-            <IconButton aria-lebel="replay" >
+            <IconButton aria-label="replay" onClick={()=>window.location.href='/admin/guestbook'}>
                 <ReplayIcon fontSize="large" />
             </IconButton>
-            <IconButton aria-lebel="search">
+            <IconButton aria-label="search">
                 <SearchIcon fontSize="large" />
             </IconButton>
         </div>
-        <AddGuestBook open={modalOpen} close={closeModal}>
+        <AddGuestBook open={modalOpen} close={closeModal} handleAddGuestbook={handleAddGuestbook}>
             <Grid container>
                 <Grid item xs={4}>
-                    <ButtonBase className={classes.image}>
-                        <img className={classes.img} alt="complex" src={process.env.PUBLIC_URL + '/images/default.jpg'} />
+                    <ButtonBase className={classes.image} >
+                        <input 
+                            id="input-file" 
+                            type="file" 
+                            accept=".gif, .jpg, .png"
+                            onChange={handleFileOnChange}
+                            style={{display: 'none'}} 
+                        />
+                        <label htmlFor="input-file">
+                            <img 
+                                className={classes.img} 
+                                alt="image" 
+                                src={state.previewURL} 
+                                style={{cursor: 'pointer'}}
+                            />
+                            <span>gif, jpg, png만 <br />선택 가능합니다</span>
+                        </label>
                     </ButtonBase>
                 </Grid>
                 <Grid item xs={8}>
@@ -84,8 +132,11 @@ export default function GuestBook(){
                         className={classes.inputWidth} 
                         label="Title"
                         id="input-title"
+                        error={state.title===""? true: false}
                         margin="normal"
                         variant="outlined"
+                        defaultValue={state.title}
+                        onChange={handleContentOnChange('title')}
                     />
                     <TextField 
                         className={classes.inputWidth}
@@ -95,6 +146,9 @@ export default function GuestBook(){
                         variant="outlined"
                         multiline
                         rows={5}
+                        error={state.content===""? true: false}
+                        defaultValue={state.content}
+                        onChange={handleContentOnChange('content')}
                     />
                 </Grid>
             </Grid>
@@ -113,23 +167,20 @@ export default function GuestBook(){
                                 <Grid item xs container direction="column" spacing={2}>
                                     <Grid item xs>
                                         <Typography gutterBottom variant="subtitle1">
-                                            Standard license
-                                        </Typography>
-                                        <Typography variant="body2" gutterBottom>
-                                            Full resolution 1920*1080 . JPEG
+                                            Title
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            ID: 1030114
+                                            Content
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body2" style={{custor: 'pointer'}}>
-                                            Remove
+                                        <Typography variant="body2">
+                                            date
                                         </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant="subtitle1">$19.00</Typography>
+                                    <Typography color="textSecondary">userId</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
