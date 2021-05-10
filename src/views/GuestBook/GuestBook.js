@@ -14,6 +14,9 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import AddGuestBook from './AddGuestBook';
 import DetailGuestBook from './DetailGuestBook';
 
+import * as Service from "./GuestBook-Service";
+import { useCookies } from 'react-cookie';
+
 const useStyles = makeStyles((theme)=> ({
     main: {
         width: '100%', 
@@ -61,6 +64,8 @@ export default function GuestBook(){
         previewURL: process.env.PUBLIC_URL + '/images/selectImage.png'
     });
 
+    const [cookie] = useCookies(['rememberJwt']);
+
     const openModel = () => {
         setModalOpen(true);
     }
@@ -96,7 +101,12 @@ export default function GuestBook(){
     }
 
     const handleAddGuestbook = () => {
-        console.log(state);
+        let guestBook = new FormData();
+        guestBook.append('guestbookTitle', state.title);
+        guestBook.append('guestbookContent', state.content);
+        guestBook.append('guestbookImgFile', state.file);
+        
+        const AddGuestBook = Service.AddGuestBook(guestBook, cookie.rememberJwt);
     }
 
     const handleOneOnCilck = () => {
