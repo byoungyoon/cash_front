@@ -80,7 +80,7 @@ const useStyles = makeStyles(styles);
 
 const DetailGuestBook = (props) => {
     const classes = useStyles();
-    const {open, close} = props;
+    const {open, close, header} = props;
 
     return(
         <div className={open? classes.model: classes.closeModel}>
@@ -89,7 +89,7 @@ const DetailGuestBook = (props) => {
                     <Grid container>
                         <Grid item xs={6} md={6}>
                             <Typography variant="h6" gutterBottom>
-                                Title
+                                {header}
                             </Typography>
                             <Typography variant="subtitle1" gutterBottom style={{color: 'gray'}}>
                                 방명록 상세 보기

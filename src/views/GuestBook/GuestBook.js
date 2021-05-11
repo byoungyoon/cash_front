@@ -68,6 +68,16 @@ export default function GuestBook(){
         previewURL: process.env.PUBLIC_URL + '/images/selectImage.png'
     });
 
+    const [detailValue, setDetailValue] = useState({
+        no: 0,
+        title: '',
+        userId: '',
+        content: '',
+        count: 0,
+        date: '',
+        // img: ''
+    });
+
     const [cookie] = useCookies(['rememberJwt']);
 
     const openModel = () => {
@@ -115,6 +125,19 @@ export default function GuestBook(){
     }
 
     const handleOneOnCilck = () => {
+        if(!detailModalOpen){
+            const detailGuestBook = Service.detailGuestBook(1,cookie.rememberJwt);
+            detailGuestBook.then((response)=>{
+                setDetailValue({
+                    no: response.guestbookNo,
+                    userId: response.userId,
+                    title: response.guestbookTitle,
+                    content: response.guestbookContent,
+                    count: response.guestbookCount,
+                    date: response.createDate
+                });
+            });
+        }
         setDetailModalOpen(detailModalOpen => !detailModalOpen);
     }
 
@@ -165,7 +188,7 @@ export default function GuestBook(){
                             error={state.title===""? true: false}
                             margin="normal"
                             variant="outlined"
-                            defaultValue={state.title}
+                            value={state.title}
                             onChange={handleContentOnChange('title')}
                         />
                         <TextField 
@@ -183,9 +206,9 @@ export default function GuestBook(){
                     </Grid>
                 </Grid>
             </AddGuestBook>
-            <DetailGuestBook open={detailModalOpen} close={handleOneCloseOnClick}>
+            <DetailGuestBook open={detailModalOpen} close={handleOneCloseOnClick} header={detailValue.title}>
                 <Grid container>
-                    <Grid itme xs={5}>
+                    <Grid item xs={5}>
                         <img 
                             className={classes.img} 
                             alt="image" 
@@ -199,7 +222,7 @@ export default function GuestBook(){
                             id="detail-title"
                             margin="normal"
                             variant="outlined"
-                            defaultValue="title"
+                            value={detailValue.title}
                             disabled
                         />
                         <TextField 
@@ -210,7 +233,7 @@ export default function GuestBook(){
                             variant="outlined"
                             multiline
                             rows={5}
-                            defaultValue="content"
+                            value={detailValue.content}
                             disabled
                         />
                         <TextField 
@@ -219,7 +242,7 @@ export default function GuestBook(){
                             id="detail-userId"
                             margin="normal"
                             variant="outlined"
-                            defaultValue="userId"
+                            value={detailValue.userId}
                             disabled
                         />
                         <TextField 
@@ -228,7 +251,7 @@ export default function GuestBook(){
                             id="detail-date"
                             margin="normal"
                             variant="outlined"
-                            defaultValue="date"
+                            value={detailValue.date}
                             disabled
                         />
                         <TextField 
@@ -237,7 +260,7 @@ export default function GuestBook(){
                             id="detail-count"
                             margin="normal"
                             variant="outlined"
-                            defaultValue={1}
+                            value={detailValue.count}
                             disabled
                         />
                     </Grid>

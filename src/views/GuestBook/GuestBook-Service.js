@@ -11,4 +11,17 @@ const AddGuestBook = async (guestBook, token) => {
     return true;
 }
 
-export {AddGuestBook};
+const detailGuestBook = async (no, token) => {
+    let result = "";
+    await axios({
+        method: 'GET',
+        url: 'http://localhost:8080/user/getDetailGuestBook?guestbookNo=' + no,
+        headers: {'Authorization': 'Bearer ' + token}
+    }).then(response=>{
+        result = response.data;
+    });
+
+    return result;
+}
+
+export {AddGuestBook, detailGuestBook};
