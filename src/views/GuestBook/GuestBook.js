@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme)=> ({
         width: 140,
         height: 175
     },
+    detailImage: {
+        width: 280,
+        height: 350
+    },
     img: {
         margin: 'auto',
         display: 'block',
@@ -48,7 +52,7 @@ const useStyles = makeStyles((theme)=> ({
     },
     inputWidth: {
         width: '100%',
-        margin: 'auto auto 8px auto'
+        margin: 'auto auto 1em auto'
     }
 }));
 
@@ -107,10 +111,11 @@ export default function GuestBook(){
         guestBook.append('guestbookImgFile', state.file);
         
         const AddGuestBook = Service.AddGuestBook(guestBook, cookie.rememberJwt);
+        closeModal();
     }
 
     const handleOneOnCilck = () => {
-        setDetailModalOpen(true);
+        setDetailModalOpen(detailModalOpen => !detailModalOpen);
     }
 
     const handleOneCloseOnClick = () => {
@@ -178,10 +183,66 @@ export default function GuestBook(){
                     </Grid>
                 </Grid>
             </AddGuestBook>
-            <DetailGuestBook 
-                open={detailModalOpen}
-                close={setDetailModalOpen}
-            />
+            <DetailGuestBook open={detailModalOpen} close={handleOneCloseOnClick}>
+                <Grid container>
+                    <Grid itme xs={5}>
+                        <img 
+                            className={classes.img} 
+                            alt="image" 
+                            src={process.env.PUBLIC_URL + '/images/default.jpg'} 
+                        />
+                    </Grid>
+                    <Grid item xs={7} style={{padding: '0 0 0 12px'}}>
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="Title"
+                            id="detail-title"
+                            margin="normal"
+                            variant="outlined"
+                            defaultValue="title"
+                            disabled
+                        />
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="Content"
+                            id="detail-content"
+                            margin="normal"
+                            variant="outlined"
+                            multiline
+                            rows={5}
+                            defaultValue="content"
+                            disabled
+                        />
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="작성자"
+                            id="detail-userId"
+                            margin="normal"
+                            variant="outlined"
+                            defaultValue="userId"
+                            disabled
+                        />
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="작성 날짜"
+                            id="detail-date"
+                            margin="normal"
+                            variant="outlined"
+                            defaultValue="date"
+                            disabled
+                        />
+                        <TextField 
+                            className={classes.inputWidth}
+                            label="방문 횟수"
+                            id="detail-count"
+                            margin="normal"
+                            variant="outlined"
+                            defaultValue={1}
+                            disabled
+                        />
+                    </Grid>
+                </Grid>
+            </DetailGuestBook>
             <div className={classes.root}>
                 <Grid container>
                     <Grid item xs={12} md={6}>

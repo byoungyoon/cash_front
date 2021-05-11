@@ -9,7 +9,7 @@ const styles = (theme) => ({
         right: '0',
         bottom: '0',
         left: '0',
-        zIndex: '99',
+        zIndex: '999999',
         backgroundColor: 'rgba(0,0,0,0.6)',
         "& button": {
             outline: 'none',
@@ -19,7 +19,7 @@ const styles = (theme) => ({
         "& > section": {
             width: '90%',
             maxWidth: '520px',
-            maxHeight: '366px',
+            maxHeight: '378px',
             margin: '8em auto',
             borderRadius: '.3rem',
             backgroundColor: '#fff',

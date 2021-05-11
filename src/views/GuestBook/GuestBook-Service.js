@@ -7,10 +7,7 @@ const AddGuestBook = async (guestBook, token) => {
         url: 'http://localhost:8080/user/addGuestBook',
         data: guestBook,
         headers: {'Authorization': 'Bearer ' + token}
-    });
-
-    console.log(guestBook);
-
+    }).catch((error)=> console.log('error 발생'));
     return true;
 }
 
