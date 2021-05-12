@@ -24,4 +24,23 @@ const detailGuestBook = async (no, token) => {
     return result;
 }
 
-export {AddGuestBook, detailGuestBook};
+const deleteGuestBook = async (no, token) => {
+    await axios({
+        method: 'GET',
+        url: 'http://localhost:8080/user/removeGuestBook?guestbookNo=' + no,
+        headers: {'Authorization': 'Bearer ' + token}
+    }).catch((error)=> console.log('error 발생'));
+}
+
+const updateGuestBook = async (guestBook, token) => {
+    await axiox({
+        method: 'POST',
+        url: 'http://localhost:8080/user/modifyGuestBook',
+        data: guestBook,
+        headers: {'Authorization': 'Bearer ' + token}
+    }).then((response)=>{
+        console.log(response);
+    });
+}
+
+export {AddGuestBook, detailGuestBook, deleteGuestBook, updateGuestBook};
