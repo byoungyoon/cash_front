@@ -61,6 +61,8 @@ export default function GuestBook(){
 
     const [modalOpen, setModalOpen] = useState(false);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
+    const [modifyModalOpen, setModifyModalOpen] = useState(false);
+
     const [state, setState] = useState({
         title: '',
         content: '',
@@ -120,29 +122,42 @@ export default function GuestBook(){
         guestBook.append('guestbookContent', state.content);
         guestBook.append('guestbookImgFile', state.file);
         
-        const AddGuestBook = Service.AddGuestBook(guestBook, cookie.rememberJwt);
+        const addGuestBook = Service.AddGuestBook(guestBook, cookie.rememberJwt);
         closeModal();
     }
 
     const handleOneOnCilck = () => {
-        if(!detailModalOpen){
-            const detailGuestBook = Service.detailGuestBook(1,cookie.rememberJwt);
-            detailGuestBook.then((response)=>{
-                setDetailValue({
-                    no: response.guestbookNo,
-                    userId: response.userId,
-                    title: response.guestbookTitle,
-                    content: response.guestbookContent,
-                    count: response.guestbookCount,
-                    date: response.createDate
-                });
+        const detailGuestBook = Service.detailGuestBook(1,cookie.rememberJwt);
+        detailGuestBook.then((response)=>{
+            setDetailValue({
+                no: response.guestbookNo,
+                userId: response.userId,
+                title: response.guestbookTitle,
+                content: response.guestbookContent,
+                count: response.guestbookCount,
+                date: response.createDate
             });
-        }
-        setDetailModalOpen(detailModalOpen => !detailModalOpen);
+        });
+        setDetailModalOpen(detailModalOpen => detailModalOpen = true);
     }
 
     const handleOneCloseOnClick = () => {
         setDetailModalOpen(false);
+    }
+
+    const handleRemoveOnClick = () => {
+        const removeGuestBook = Service.removeGuestBook(detailValue.no, cookie.rememberJwt);
+        handleOneCloseOnClick();
+    }
+
+    const handleModifyOnClick = () => {
+        let guestBook = new FormData();
+        guestBook.append('guestbookNo', detailValue.no);
+        guestBook.append('guestbookTitle', 'modifyTest');
+        guestBook.append('guestbookContent', 'modifyContent');
+
+        const modifyGuestBook = Service.modifyGuestBook(guestBook, cookie.rememberJwt);
+        handleOneOnCilck();
     }
 
     return(
@@ -206,7 +221,7 @@ export default function GuestBook(){
                     </Grid>
                 </Grid>
             </AddGuestBook>
-            <DetailGuestBook open={detailModalOpen} close={handleOneCloseOnClick} header={detailValue.title}>
+            <DetailGuestBook open={detailModalOpen} close={handleOneCloseOnClick} header={detailValue.title} remove={handleRemoveOnClick} modify={handleModifyOnClick}>
                 <Grid container>
                     <Grid item xs={5}>
                         <img 

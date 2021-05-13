@@ -80,7 +80,7 @@ const useStyles = makeStyles(styles);
 
 const DetailGuestBook = (props) => {
     const classes = useStyles();
-    const {open, close, header} = props;
+    const {open, close, header, remove, modify} = props;
 
     return(
         <div className={open? classes.model: classes.closeModel}>
@@ -100,10 +100,10 @@ const DetailGuestBook = (props) => {
                                 <button onClick={close}>&times;</button>
                             </div>
                             <div className={classes.buttonForm}>
-                                <IconButton aria-label="create" style={{marginRight: '0.3em'}}>
+                                <IconButton aria-label="create" onClick={modify} style={{marginRight: '0.3em'}}>
                                     <CreateIcon className={classes.buttonStyle} />
                                 </IconButton>
-                                <IconButton aria-label="delete">
+                                <IconButton aria-label="delete" onClick={remove}>
                                     <DeleteIcon className={classes.buttonStyle} />
                                 </IconButton>
                             </div>

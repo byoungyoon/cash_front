@@ -24,7 +24,7 @@ const detailGuestBook = async (no, token) => {
     return result;
 }
 
-const deleteGuestBook = async (no, token) => {
+const removeGuestBook = async (no, token) => {
     await axios({
         method: 'GET',
         url: 'http://localhost:8080/user/removeGuestBook?guestbookNo=' + no,
@@ -32,15 +32,13 @@ const deleteGuestBook = async (no, token) => {
     }).catch((error)=> console.log('error 발생'));
 }
 
-const updateGuestBook = async (guestBook, token) => {
-    await axiox({
+const modifyGuestBook = async (guestBook, token) => {
+    await axios({
         method: 'POST',
         url: 'http://localhost:8080/user/modifyGuestBook',
         data: guestBook,
         headers: {'Authorization': 'Bearer ' + token}
-    }).then((response)=>{
-        console.log(response);
-    });
+    }).catch((error)=> console.log('error 발생'));
 }
 
-export {AddGuestBook, detailGuestBook, deleteGuestBook, updateGuestBook};
+export {AddGuestBook, detailGuestBook, removeGuestBook, modifyGuestBook};
