@@ -1,6 +1,20 @@
 import axios from 'axios';
 import React from 'react';
 
+const getGuestBook = async (token) => {
+    let guestBookList = '';
+    await axios({
+        method: 'GET',
+        url: 'http://localhost:8080/user/getGuestBook',
+        headers: {'Authorization': 'Bearer ' + token}
+    }).then((response)=>{
+        guestBookList = response.data;
+    });
+    console.log(guestBookList);
+
+    return guestBookList;
+}
+
 const AddGuestBook = async (guestBook, token) => {
     await axios({
         method: 'POST',
@@ -41,4 +55,4 @@ const modifyGuestBook = async (guestBook, token) => {
     }).catch((error)=> console.log('error 발생'));
 }
 
-export {AddGuestBook, detailGuestBook, removeGuestBook, modifyGuestBook};
+export {AddGuestBook, detailGuestBook, removeGuestBook, modifyGuestBook, getGuestBook};

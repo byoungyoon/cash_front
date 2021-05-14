@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -82,6 +82,11 @@ export default function GuestBook(){
 
     const [cookie] = useCookies(['rememberJwt']);
 
+    useEffect(()=>{
+        let getGuestBook = Service.getGuestBook(cookie.rememberJwt);
+        console.log(getGuestBook);
+    },[]);
+
     const openModel = () => {
         setModalOpen(true);
     }
@@ -151,6 +156,10 @@ export default function GuestBook(){
     }
 
     const handleModifyOnClick = () => {
+        setModifyModalOpen()
+    }
+
+    const handleModify = () => {
         let guestBook = new FormData();
         guestBook.append('guestbookNo', detailValue.no);
         guestBook.append('guestbookTitle', 'modifyTest');
