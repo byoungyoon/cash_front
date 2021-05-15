@@ -10,7 +10,6 @@ const getGuestBook = async (token) => {
     }).then((response)=>{
         guestBookList = response.data;
     });
-    console.log(guestBookList);
 
     return guestBookList;
 }

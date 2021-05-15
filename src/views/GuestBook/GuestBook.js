@@ -80,12 +80,22 @@ export default function GuestBook(){
         // img: ''
     });
 
+    const [listValue, setListValue] = useState([]);
+
     const [cookie] = useCookies(['rememberJwt']);
 
     useEffect(()=>{
         let getGuestBook = Service.getGuestBook(cookie.rememberJwt);
-        console.log(getGuestBook);
+        getGuestBook.then((response)=>{
+            setListValue(listValue.concat(response));
+            console.log(listValue);
+            console.log(response);
+        });
     },[]);
+
+    const test = () => {
+
+    }
 
     const openModel = () => {
         setModalOpen(true);
