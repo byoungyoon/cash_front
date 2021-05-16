@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = (theme) => ({
     model: {
@@ -80,7 +81,7 @@ const useStyles = makeStyles(styles);
 
 const DetailGuestBook = (props) => {
     const classes = useStyles();
-    const {open, close, header, remove, modify} = props;
+    const {open, close, header, remove, modify, modifyForm, modifyAction} = props;
 
     return(
         <div className={open? classes.model: classes.closeModel}>
@@ -100,12 +101,26 @@ const DetailGuestBook = (props) => {
                                 <button onClick={close}>&times;</button>
                             </div>
                             <div className={classes.buttonForm}>
-                                <IconButton aria-label="create" onClick={modify} style={{marginRight: '0.3em'}}>
-                                    <CreateIcon className={classes.buttonStyle} />
-                                </IconButton>
-                                <IconButton aria-label="delete" onClick={remove}>
-                                    <DeleteIcon className={classes.buttonStyle} />
-                                </IconButton>
+                                {!modifyForm && (
+                                    <>
+                                    <IconButton aria-label="create" onClick={modify} style={{marginRight: '0.3em'}}>
+                                        <CreateIcon className={classes.buttonStyle} />
+                                    </IconButton>
+                                    <IconButton aria-label="delete" onClick={remove}>
+                                        <DeleteIcon className={classes.buttonStyle} />
+                                    </IconButton>
+                                    </>
+                                )}
+                                {modifyForm && (
+                                    <>
+                                    <IconButton aria-label="close" onClick={modify} style={{marginRight: '0.3em'}}>
+                                        <CloseIcon className={classes.buttonStyle} />
+                                    </IconButton>
+                                    <IconButton aria-label="create" onClick={modifyAction}>
+                                        <CreateIcon className={classes.buttonStyle} />
+                                    </IconButton>
+                                    </>
+                                )}
                             </div>
                         </Grid>
                     </Grid>
