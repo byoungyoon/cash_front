@@ -80,6 +80,11 @@ export default function GuestBook(){
         // img: ''
     });
 
+    const [modifyValue, setModifyValue] = useState({
+        title: '',
+        content: ''
+    }); 
+
     const [listValue, setListValue] = useState();
 
     const [cookie] = useCookies(['rememberJwt']);
@@ -147,6 +152,11 @@ export default function GuestBook(){
                 count: response.guestbookCount,
                 date: response.createDate
             });
+
+            setModifyValue({
+                title: response.guestbookTitle,
+                content: response.guestbookContent
+            });
         });
         setDetailModalOpen(detailModalOpen => detailModalOpen = true);
     }
@@ -167,12 +177,19 @@ export default function GuestBook(){
     const handleModify = () => {
         let guestBook = new FormData();
         guestBook.append('guestbookNo', detailValue.no);
-        guestBook.append('guestbookTitle', 'modifyTest');
-        guestBook.append('guestbookContent', 'modifyContent');
+        guestBook.append('guestbookTitle', modifyValue.title);
+        guestBook.append('guestbookContent', modifyValue.content);
 
         const modifyGuestBook = Service.modifyGuestBook(guestBook, cookie.rememberJwt);
 
         window.location.href='/admin/guestbook';
+    }
+
+    const handleModifyOnChange = (prop) => (event) => {
+        setModifyValue({
+            ...detailValue,
+            [prop]: event.target.value
+        });
     }
 
     return(
@@ -257,7 +274,8 @@ export default function GuestBook(){
                             id="detail-title"
                             margin="normal"
                             variant="outlined"
-                            value={detailValue.title}
+                            value={modifyValue.title}
+                            onChange={handleModifyOnChange('title')}
                             disabled={modifyModalOpen?false:true}
                         />
                         <TextField 
@@ -268,7 +286,8 @@ export default function GuestBook(){
                             variant="outlined"
                             multiline
                             rows={5}
-                            value={detailValue.content}
+                            value={modifyValue.content}
+                            onChange={handleModifyOnChange('content')}
                             disabled={modifyModalOpen?false:true}
                         />
                         <TextField 
